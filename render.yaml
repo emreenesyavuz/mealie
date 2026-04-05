@@ -1,0 +1,49 @@
+databases:
+  - name: mealie-db
+    plan: free
+    databaseName: mealie
+    user: mealie
+    ipAllowList: []
+
+services:
+  - type: web
+    name: mealie
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/app/about
+    envVars:
+      - key: BASE_URL
+        sync: false
+      - key: ALLOW_SIGNUP
+        value: "true"
+      - key: MAX_WORKERS
+        value: "1"
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: TZ
+        value: Europe/Istanbul
+      - key: DB_ENGINE
+        value: postgres
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: mealie-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: mealie-db
+          property: password
+      - key: POSTGRES_SERVER
+        fromDatabase:
+          name: mealie-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: mealie-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: mealie-db
+          property: database
+      - key: OPENAI_API_KEY
+        sync: false
