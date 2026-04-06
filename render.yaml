@@ -11,7 +11,12 @@ services:
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
+    port: 9000
     healthCheckPath: /api/app/about
+    disk:
+      name: mealie-data
+      mountPath: /app/data
+      sizeGB: 5
     envVars:
       - key: BASE_URL
         sync: false
